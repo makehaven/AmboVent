@@ -14,7 +14,7 @@ Use the Rate potentiometer to move the arm up/down.
 */
 
 #include <EEPROM.h>
-#include <LiquidCrystal_I2C.h>
+#include <LCDi2cNHD.h>
 #include <Servo.h>
 #include <SparkFun_MS5803_I2C.h>
 #include <Wire.h>
@@ -135,8 +135,7 @@ Use the Rate potentiometer to move the arm up/down.
 #define invert_pot 0
 
 Servo motor;
-LiquidCrystal_I2C lcd(0x27, 16,
-                      2);  // Set the LCD address to 0x27 for a 16 chars and 2 line display
+LCDi2cNHD lcd(2, 16, 0x28, 0);  // Set the LCD address to 0x28 for a 16 chars and 2 line display
 #if (pressure_sensor_available == 1)
 MS5803 sparkfumPress(ADDRESS_HIGH);
 #endif
@@ -234,8 +233,7 @@ void setup()
 
     if (LCD_available)
     {
-        lcd.begin();      // initialize the LCD
-        lcd.backlight();  // Turn on the blacklight and print a message.
+        lcd.init();      // initialize the LCD
         lcd.setCursor(0, 0);
         lcd.print("AmvoVent       ");
         lcd.setCursor(0, 1);
@@ -272,7 +270,6 @@ void setup()
     insp_pressure = insp_pressure_default;
     patient_triggered_breath = patient_triggered_breath_def;
     motion_time = motion_time_default;
-    lcd.backlight();  // Turn on the blacklight and print a message.
 }
 
 void loop()
