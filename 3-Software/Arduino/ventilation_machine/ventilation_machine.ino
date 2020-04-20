@@ -1100,14 +1100,17 @@ void read_IO()
             }
         }
     }
-    range_factor = perc_of_lower_volume
-                   + (Compression_perc - perc_of_lower_vol_display) * (100 - perc_of_lower_volume)
-                         / (100 - perc_of_lower_vol_display);
-    range_factor = range_factor / 100;
-    if (range_factor > 1)
-        range_factor = 1;
-    if (range_factor < 0)
-        range_factor = 0;
+    if (is_starting_respiration())
+    {
+        range_factor = perc_of_lower_volume
+                       + (Compression_perc - perc_of_lower_vol_display)
+                             * (100 - perc_of_lower_volume) / (100 - perc_of_lower_vol_display);
+        range_factor = range_factor / 100;
+        if (range_factor > 1)
+            range_factor = 1;
+        if (range_factor < 0)
+            range_factor = 0;
+    }
 
 #if (pressure_sensor_available == 1)
     {
@@ -1128,6 +1131,11 @@ void read_IO()
         wanted_cycle_time = breath_cycle_time / profile_length;
     if (wanted_cycle_time < cycleTime)
         wanted_cycle_time = cycleTime;
+}
+
+bool is_starting_respiration()
+{
+    return index == 0;
 }
 
 void send_data_to_monitor()
